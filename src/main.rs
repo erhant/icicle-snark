@@ -1,4 +1,4 @@
-use icicle_snark::{CacheManager, groth16_prove};
+use icicle_snark::{groth16_prove, CacheManager, FileWrapper};
 use std::io::{self, BufRead, Write};
 
 enum ProofSystem {
@@ -112,8 +112,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }) => {
                 match system {
                     ProofSystem::Groth16 => {
-                        groth16_prove(witness, zkey, proof, public, &device, &mut cache_manager)
-                            .unwrap()
+                        let (proof_data, public_signals) =
+                            groth16_prove(witness, zkey, &device, &mut cache_manager).unwrap();
+
+                        FileWrapper::save_json_file(proof, &proof_data)?;
+                        FileWrapper::save_json_file(public, &public_signals)?;
                     }
                 }
                 println!("COMMAND_COMPLETED");

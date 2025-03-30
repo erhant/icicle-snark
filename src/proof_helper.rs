@@ -1,27 +1,25 @@
-use std::path::Path;
-
-use crate::{
-    F, ProjectiveG1, ProjectiveG2,
-    cache::ZKeyCache,
-    conversions::{from_u8, serialize_g1_affine, serialize_g2_affine},
-    file_wrapper::FileWrapper,
-    icicle_helper::{msm_helper, ntt_helper},
-};
 use icicle_bn254::curve::ScalarField;
 use icicle_core::{
     traits::{FieldImpl, MontgomeryConvertible},
-    vec_ops::{VecOpsConfig, mul_scalars, sub_scalars},
+    vec_ops::{mul_scalars, sub_scalars, VecOpsConfig},
 };
 use icicle_runtime::{
     memory::{DeviceSlice, DeviceVec, HostOrDeviceSlice, HostSlice},
     stream::IcicleStream,
 };
 use num_bigint::BigUint;
+use rayon::prelude::*;
 use serde::Serialize;
 use serde_json::Value;
 use std::path::Path;
 
-use rayon::prelude::*;
+use crate::{
+    cache::ZKeyCache,
+    conversions::{from_u8, serialize_g1_affine, serialize_g2_affine},
+    file_wrapper::FileWrapper,
+    icicle_helper::{msm_helper, ntt_helper},
+    ProjectiveG1, ProjectiveG2, F,
+};
 
 #[cfg(not(feature = "no-randomness"))]
 use icicle_bn254::curve::ScalarCfg;
