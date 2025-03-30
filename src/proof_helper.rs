@@ -28,9 +28,9 @@ use icicle_core::traits::GenerateRandom;
 
 #[derive(Serialize)]
 pub struct Proof {
-    pub pi_a: Vec<String>,
-    pub pi_b: Vec<Vec<String>>,
-    pub pi_c: Vec<String>,
+    pub pi_a: [String; 2],
+    pub pi_b: [[String; 2]; 2],
+    pub pi_c: [String; 2],
     pub protocol: String,
     pub curve: String,
 }

@@ -27,18 +27,14 @@ pub fn from_affine_mont<C: Curve>(points: &mut [Affine<C>]) {
     stream.destroy().unwrap();
 }
 
-pub fn serialize_g1_affine(point: G1) -> Vec<String> {
+pub fn serialize_g1_affine(point: G1) -> [String; 2] {
     let x_bytes = BigUint::from_bytes_le(&point.x.to_bytes_le()[..]);
     let y_bytes = BigUint::from_bytes_le(&point.y.to_bytes_le()[..]);
 
-    vec![
-        x_bytes.to_str_radix(10),
-        y_bytes.to_str_radix(10),
-        "1".to_string(),
-    ]
+    [x_bytes.to_str_radix(10), y_bytes.to_str_radix(10)]
 }
 
-pub fn serialize_g2_affine(point: G2) -> Vec<Vec<String>> {
+pub fn serialize_g2_affine(point: G2) -> [[String; 2]; 2] {
     let x_bytes = point.x.to_bytes_le();
     let size = x_bytes.len() / 2;
     let x_bytes_1 = BigUint::from_bytes_le(&x_bytes[..size]);
@@ -48,10 +44,9 @@ pub fn serialize_g2_affine(point: G2) -> Vec<Vec<String>> {
     let y_bytes_1 = BigUint::from_bytes_le(&y_bytes[..size]);
     let y_bytes_2 = BigUint::from_bytes_le(&y_bytes[size..]);
 
-    vec![
-        vec![x_bytes_1.to_str_radix(10), x_bytes_2.to_str_radix(10)],
-        vec![y_bytes_1.to_str_radix(10), y_bytes_2.to_str_radix(10)],
-        vec!["1".to_string(), "0".to_string()],
+    [
+        [x_bytes_1.to_str_radix(10), x_bytes_2.to_str_radix(10)],
+        [y_bytes_1.to_str_radix(10), y_bytes_2.to_str_radix(10)],
     ]
 }
 
